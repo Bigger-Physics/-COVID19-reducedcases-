@@ -670,6 +670,9 @@ plot_multi_simulations <- function(country,
   }
   
   t_index <- results[[1]]$dates[results[[1]]$t_index]
+  fitstart_index <- results[[1]]$dates[results[[1]]$fitstart_index]
+  fitstart_ymax1 <- results[[1]]$I$I_real[results[[1]]$t_index - 1]
+  fitstart_ymax2 <- results[[1]]$I$cum_I_real[results[[1]]$t_index - 1]
   T_index <- results[[1]]$dates[results[[1]]$T_index]
   plot_start_date <- results[[1]]$dates[plot_start_index]
   
@@ -699,6 +702,14 @@ plot_multi_simulations <- function(country,
         geom_vline(xintercept = T_index, linetype = "dotted") +
         annotate("text", x = T_index + 1, y = 0, 
                  label = "italic(T)", parse = TRUE) +
+        geom_vline(xintercept = fitstart_index, linetype = "dotted") +
+        geom_vline(xintercept = t_index - 1, linetype = "dotted") +
+        annotate("text", x = fitstart_index, y = fitstart_ymax1, 
+                 label = "italic(T[1]-Delta)", parse = TRUE) +
+        annotate("text", x = t_index - 3, y = 0, 
+                 label = "italic(T[1])", parse = TRUE) +
+        annotate("rect", xmin = fitstart_index, xmax = t_index - 1,
+                 ymin = 0, ymax = fitstart_ymax1, alpha = 0.2) +
         scale_x_date(date_labels = "%m-%d", 
                      limits = c(plot_start_date - 1, max(df$dates) + 1))
     }
@@ -712,6 +723,14 @@ plot_multi_simulations <- function(country,
         geom_vline(xintercept = T_index, linetype = "dotted") +
         annotate("text", x = T_index + 1, y = 0, 
                  label = "italic(T)", parse = TRUE) +
+        geom_vline(xintercept = fitstart_index, linetype = "dotted") +
+        geom_vline(xintercept = t_index - 1, linetype = "dotted") +
+        annotate("text", x = fitstart_index, y = fitstart_ymax2, 
+                 label = "italic(T[1]-Delta)", parse = TRUE) +
+        annotate("text", x = t_index - 3, y = 0, 
+                 label = "italic(T[1])", parse = TRUE) +
+        annotate("rect", xmin = fitstart_index, xmax = t_index - 1,
+                 ymin = 0, ymax = fitstart_ymax2, alpha = 0.2) +
         scale_x_date(date_labels = "%m-%d", 
                      limits = c(plot_start_date - 1, max(df$dates) + 1))
     }
@@ -1168,6 +1187,7 @@ predict_country_null <- function (country,
   sim_data$I$cum_I_real <- cumsum(I_real)
   sim_data$dates <- dates
   sim_data$t_index <- I_past_len - last_ndays + 1
+  sim_data$fitstart_index <- I_past_len - last_ndays - fit_config$fit_length + 1
   sim_data$T_index <- I_past_len
   
   time_range <- paste0(last_ndays, "t", next_ndays)

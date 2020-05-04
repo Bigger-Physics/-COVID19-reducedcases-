@@ -74,14 +74,14 @@ plot_multi_simulations(
   plot_start_index
 )
 
-R_sg <- get_typical_R("Singapore")
-pred_result_rsg <-
-  predict_country_scenario(country, estm_result, t_minus, t_plus, "rsg", R_sg$R, R_sg$R_d)
-
-plot_multi_simulations(
-  country,
-  "uk-sg",
-  c("uk", "uk-sg"),
-  list(pred_result_null, pred_result_rsg),
-  plot_start_index
-)
+# R_sg <- get_typical_R("Singapore")
+# pred_result_rsg <-
+#   predict_country_scenario(country, estm_result, t_minus, t_plus, "rsg", R_sg$R, R_sg$R_d)
+# 
+# plot_multi_simulations(
+#   country,
+#   "uk-sg",
+#   c("uk", "uk-sg"),
+#   list(pred_result_null, pred_result_rsg),
+#   plot_start_index
+# )
