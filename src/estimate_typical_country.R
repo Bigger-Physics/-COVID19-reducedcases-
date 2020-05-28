@@ -6,7 +6,7 @@ source("COVID19.R")
 
 country <- c("Korea", "Singapore")
 start <- c(26, 24)
-base_date <- c("2020-05-23", "2020-05-23")
+base_date <- c("2020-05-07", "2020-05-23")
 plot_options <- NULL
 
 predict_typical_len <- 30
