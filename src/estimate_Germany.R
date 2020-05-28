@@ -7,7 +7,7 @@ source("COVID19.R")
 country <- "Germany"
 window <- 6
 start <- 26
-base_date =  "2020-04-08"
+base_date =  "2020-05-23"
 plot_options <- NULL
 
 
@@ -22,8 +22,8 @@ estm_result <- estimate_R_simple_model(
 plot_start_index <- estm_result$R$t_start[1] - 1
 
 t_plus <- 60
-t_minus <- 7
-fit_length <- 20
+t_minus <- 14
+fit_length <- 25
 fit_model <- 1
 fit_params <- list(a = 0.1,
                    b = 5,
@@ -46,25 +46,25 @@ R_cn <- get_typical_R("China")
 pred_result_rcn <-
   predict_country_scenario(country, estm_result, t_minus, t_plus, "rcn", R_cn$R, R_cn$R_d)
 
-plot_multi_simulations(
-  country,
-  "de-cn",
-  c("de", "de-cn"),
-  list(pred_result_null, pred_result_rcn),
-  plot_start_index
-)
+# plot_multi_simulations(
+#   country,
+#   "de-cn",
+#   c("de", "de-cn"),
+#   list(pred_result_null, pred_result_rcn),
+#   plot_start_index
+# )
 
 R_kr <- get_typical_R("Korea")
 pred_result_rkr <-
   predict_country_scenario(country, estm_result, t_minus, t_plus, "rkr", R_kr$R, R_kr$R_d)
 
-plot_multi_simulations(
-  country,
-  "de-kr",
-  c("de", "de-kr"),
-  list(pred_result_null, pred_result_rkr),
-  plot_start_index
-)
+# plot_multi_simulations(
+#   country,
+#   "de-kr",
+#   c("de", "de-kr"),
+#   list(pred_result_null, pred_result_rkr),
+#   plot_start_index
+# )
 
 plot_multi_simulations(
   country,

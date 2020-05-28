@@ -1034,6 +1034,12 @@ estimate_R_simple_model <- function (country,
     incid <- incid[incid$dates <= base_date, ]
   }
   
+  if (start == 0) {
+    cum_I <- cumsum(incid$imported + incid$local)
+    incid <- incid <- incid[cum_I > 20, ]
+    start <- 2
+  }
+  
   t_len <- nrow(incid)
   t_start <- seq(start, t_len - window)
   t_end <- t_start + window

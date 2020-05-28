@@ -63,9 +63,9 @@ for (country in countries) {
 save_fig2_data <- function (country, label) {
   output_dir = paste0(RESULT_ROOT_DIR, "/", country, "/")
   
-  null_file <- paste0(output_dir, country, "_null_fittail_7t60_result.csv")
-  cn_file <- paste0(output_dir, country, "_rcn_7t60_result.csv")
-  kr_file <- paste0(output_dir, country, "_rkr_7t60_result.csv")
+  null_file <- paste0(output_dir, country, "_null_fittail_14t60_result.csv")
+  cn_file <- paste0(output_dir, country, "_rcn_14t60_result.csv")
+  kr_file <- paste0(output_dir, country, "_rkr_14t60_result.csv")
   
   null_data <- read.table(null_file, header = TRUE, sep = ",")
   cn_data <- read.table(cn_file, header = TRUE, sep = ",")

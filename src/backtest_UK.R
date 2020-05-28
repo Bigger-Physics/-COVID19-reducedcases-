@@ -7,7 +7,7 @@ source("COVID19.R")
 country <- "UK"
 window <- 6
 start <- 26
-base_date =  "2020-04-08"
+base_date =  "2020-05-23"
 plot_options <- NULL
 
 output_dir = paste0(RESULT_ROOT_DIR, "/", country, "/")
@@ -28,16 +28,15 @@ T_index <- length(estm_result$dates)
 I_t <- cumsum(estm_result$I)[T_index]
 date_t <- estm_result$dates[T_index]
 
-t_minus_n <- 30
-t_plus_n <- 10
-predict_len <- 80
+t_minus_n <- 70
+predict_len <- 60
 
 
 fit_model <- 1
 fit_params <- list(a=0.1,
                    b=5,
                    c=0.5)
-fit_length <- seq(15, 28)
+fit_length <- seq(30, 50)
 I_s <- rep(NA, length(fit_length))
 for (i in seq_len(length(fit_length))) {
   pred_result_null <- predict_country_null(
@@ -205,7 +204,7 @@ ggplot(incid_s, aes(dates, cum_I_mean)) +
                   ymax = I_t),
               fill = fill_colors[2]) +
   
-  ylim(c(0, 300000)) +
+  ylim(c(0, 350000)) +
   scale_colour_manual(name = NULL,
                       values = colors,
                       labels = labels) +
@@ -291,7 +290,7 @@ data$C_E_std<- I_s_std
 data$C_E_lb <- I_s_lb
 data$C_E_ub <- I_s_ub
 names(data)[9] <- paste0("C_", scenario_null, "_T")
-names(data)[seq(10, 13)] <- paste0("C_", scenario_null, "_E", 
+names(data)[seq(10, 13)] <- paste0("C_", scenario_null, "_E",
                                    c("_mean", "_std", "_lb", "_ub"))
 write.table(
   data,

@@ -7,7 +7,7 @@ source("COVID19.R")
 country <- "Germany"
 window <- 6
 start <- 26
-base_date =  "2020-04-08"
+base_date =  "2020-05-23"
 plot_options <- NULL
 
 output_dir = paste0(RESULT_ROOT_DIR, "/", country, "/")
@@ -28,16 +28,15 @@ T_index <- length(estm_result$dates)
 I_t <- cumsum(estm_result$I)[T_index]
 date_t <- estm_result$dates[T_index]
 
-t_minus_n <- 30
-t_plus_n <- 10
-predict_len <- 80
+t_minus_n <- 70
+predict_len <- 60
 
 
 fit_model <- 1
 fit_params <- list(a=0.1,
                    b=5,
                    c=0.5)
-fit_length <- seq(7, 32)
+fit_length <- seq(30, 50)
 I_s <- rep(NA, length(fit_length))
 for (i in seq_len(length(fit_length))) {
   pred_result_null <- predict_country_null(
@@ -55,7 +54,6 @@ for (i in seq_len(length(fit_length))) {
   I_s[i] <- pred_result_null$I[nrow(pred_result_null$I), "cum_I_mean"]
 }
 
-I_s <- I_s[I_s > 150000]
 I_s_mean <- mean(I_s)
 I_s_std <- sd(I_s)
 I_s_lb <- I_s_mean - I_s_std
@@ -291,7 +289,7 @@ data$C_E_std<- I_s_std
 data$C_E_lb <- I_s_lb
 data$C_E_ub <- I_s_ub
 names(data)[9] <- paste0("C_", scenario_null, "_T")
-names(data)[seq(10, 13)] <- paste0("C_", scenario_null, "_E", 
+names(data)[seq(10, 13)] <- paste0("C_", scenario_null, "_E",
                                    c("_mean", "_std", "_lb", "_ub"))
 write.table(
   data,

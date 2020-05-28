@@ -7,7 +7,7 @@ source("COVID19.R")
 country <- "USA"
 window <- 6
 start <- 30
-base_date =  "2020-04-08"
+base_date =  "2020-05-23"
 plot_options <- NULL
 
 output_dir = paste0(RESULT_ROOT_DIR, "/", country, "/")
@@ -28,46 +28,31 @@ T_index <- length(estm_result$dates)
 I_t <- cumsum(estm_result$I)[T_index]
 date_t <- estm_result$dates[T_index]
 
-t_minus_n <- 30
-t_plus_n <- 10
-predict_len <- 80
+t_minus_n <- 70
+predict_len <- 150
 
 
 fit_model <- 1
 fit_params <- list(a=0.1,
                    b=5,
                    c=0.5)
-fit_length <- c(7, 8, 9, 10, 11, 12, 13, 26, 27, 28)
-# I_s <- rep(NA, length(fit_length))
-# for (i in seq_len(length(fit_length))) {
-#   pred_result_null <- predict_country_null(
-#     country,
-#     estm_result,
-#     0,
-#     predict_len + fit_length[i],
-#     method = "fittail",
-#     fit_config = list(
-#       fit_length = fit_length[i],
-#       model = fit_model,
-#       params = fit_params
-#     )
-#   )
-#   I_s[i] <- pred_result_null$I[nrow(pred_result_null$I), "cum_I_mean"]
-# }
-
-I_s <-
-  c(
-    1041097,
-    1263422,
-    1527807,
-    1403637,
-    1057801,
-    1075702,
-    1119836,
-    1009017,
-    1048602,
-    1014484
+fit_length <- seq(30, 50)
+I_s <- rep(NA, length(fit_length))
+for (i in seq_len(length(fit_length))) {
+  pred_result_null <- predict_country_null(
+    country,
+    estm_result,
+    0,
+    predict_len + fit_length[i],
+    method = "fittail",
+    fit_config = list(
+      fit_length = fit_length[i],
+      model = fit_model,
+      params = fit_params
+    )
   )
+  I_s[i] <- pred_result_null$I[nrow(pred_result_null$I), "cum_I_mean"]
+}
 
 I_s_mean <- mean(I_s)
 I_s_std <- sd(I_s)
@@ -77,11 +62,11 @@ I_s_ub <- I_s_mean + I_s_std
 
 scenario_null = "us"
 
-scenario <- "us-cn"
-R_data <- get_typical_R("China")
+# scenario <- "us-cn"
+# R_data <- get_typical_R("China")
 
-# scenario <- "us-kr"
-# R_data <- get_typical_R("Korea")
+scenario <- "us-kr"
+R_data <- get_typical_R("Korea")
 
 # scenario <- "us-sg"
 # R_data <- get_typical_R("Singapore")
@@ -220,8 +205,7 @@ ggplot(incid_s, aes(dates, cum_I_mean)) +
               fill = fill_colors[2]) +
   
   
-  # ylim(c(0, 2500000)) +
-  ylim(c(0, 1600000)) +
+  ylim(c(0, 3200000)) +
   scale_colour_manual(name = NULL,
                       values = colors,
                       labels = labels) +
@@ -308,7 +292,7 @@ data$C_E_std<- I_s_std
 data$C_E_lb <- I_s_lb
 data$C_E_ub <- I_s_ub
 names(data)[9] <- paste0("C_", scenario_null, "_T")
-names(data)[seq(10, 13)] <- paste0("C_", scenario_null, "_E", 
+names(data)[seq(10, 13)] <- paste0("C_", scenario_null, "_E",
                                    c("_mean", "_std", "_lb", "_ub"))
 write.table(
   data,
