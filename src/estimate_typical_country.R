@@ -6,7 +6,7 @@ source("COVID19.R")
 
 country <- c("Korea", "Singapore")
 start <- c(26, 24)
-base_date <- c("2020-05-07", "2020-05-23")
+base_date <- c("2020-05-23", "2020-05-23")
 plot_options <- NULL
 
 predict_typical_len <- 30
@@ -18,7 +18,10 @@ for (i in seq(1, length(country))) {
                                   window = 6, 
                                   start = start[i], 
                                   base_date = base_date[i],
-                                  plot_options = plot_options)
+                                  plot_options = list(
+                                    r_ylim = NULL,
+                                    vline_date = "2020-05-07" 
+                                  ))
   
   estm_result <- estimate_R_simple_model(country[i], 
                                          window = 0, 

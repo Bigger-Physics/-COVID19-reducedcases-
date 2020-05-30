@@ -26,7 +26,8 @@ if (!dir.exists(RESULT_ROOT_DIR)) {
 # 与estimate_R的plot类似，但只画出R和incidence
 plot_estimate_R<- function (result, 
                             options = list(
-                              r_ylim = NULL
+                              r_ylim = NULL,
+                              vline_date = NULL 
                             )) {
   # colors <- brewer_pal(palette = "Set1")(3)
   colors <- few_pal("Dark")(2)
@@ -87,6 +88,13 @@ plot_estimate_R<- function (result,
     theme(legend.position = "none")
   if (class(result$dates) == "Date") {
     p_R <- p_R + scale_x_date(date_labels = "%m-%d", limits = x_limits)
+  }
+  
+  if (!is.null(options$vline_date)) {
+    vline_date <- as.Date(options$vline_date)
+    p_R <- p_R + 
+      geom_vline(xintercept = vline_date, linetype = "dotted") +
+      annotate("text", x = vline_date, y = 0, label = format(vline_date, "%m-%d")) 
   }
   
   gA <- ggplotGrob(p_incid)
@@ -1311,6 +1319,8 @@ get_typical_R <- function (country) {
   } else if (country == "Korea") {
     R_data <- read.table("results/Korea/6window/Korea_R.csv", header = TRUE, sep = ",")
     R_d_data <- read.table("results/Korea/0window/Korea_R.csv", header = TRUE, sep = ",")
+    R_data <- R_data[as.Date(R_data$date_end) <= "2020-05-07", ]
+    R_d_data <- R_d_data[as.Date(R_d_data$date_end) <= "2020-05-07", ]
   } else {
     stop("unknown typical country")
   }
